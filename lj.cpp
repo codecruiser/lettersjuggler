@@ -103,6 +103,8 @@ int main(int argc, char **argv)
 	pid_t fid, fid_kbd, fid_gtk;
 	int pipe_sid_holder[2];
 	
+	pipe(pipe_sid_holder);
+	
 	//first fork
 	fid_kbd = fork();
 	
@@ -111,9 +113,7 @@ int main(int argc, char **argv)
 		cerr << "Couldn't fork proccess" << endl;
 		exit(EXIT_FAILURE);
 	}
-	
-	pipe(pipe_sid_holder);
-	
+		
 	if(fid_kbd > 0)
 	{
 		fid_gtk = fork();
