@@ -19,6 +19,15 @@
  */
 KeyboardDweller::KeyboardDweller()
 {
+	letters = {
+		{24, 'q'},	{25, 'w'},	{26, 'e'},	{27, 'r'},	{28, 't'},
+		{29, 'y'},	{30, 'u'},	{31, 'i'},	{32, 'o'},	{33, 'p'},
+		{38, 'a'},	{39, 's'},	{40, 'd'},	{41, 'f'},	{42, 'g'},	
+		{43, 'h'},	{44, 'j'},	{45, 'k'},	{46, 'l'},	
+		{52, 'z'},	{53, 'x'},	{54, 'c'},	{55, 'v'},	{56, 'b'},	
+		{57, 'n'},	{58, 'm'}
+		};
+	
 	display = XOpenDisplay(0);
 }
 
@@ -51,9 +60,7 @@ bool KeyboardDweller::checkForKeys()
 		bool isPressed = checkKeyPressed(keymap, keyp);
 		
         if (isPressed)
-        {
-			cout << keyp;
-			
+        {			
 			keys.insert(keyp);
 			
 			pressed = true;
@@ -62,7 +69,6 @@ bool KeyboardDweller::checkForKeys()
     
     if(pressed == true)
     {
-		cout << endl;
 		checkActionAssoc();
 	}
     
@@ -87,12 +93,29 @@ void KeyboardDweller::init()
  */
 void KeyboardDweller::checkActionAssoc()
 {
-	if((keys.find(32) != keys.end()) 
-		&& (keys.find(50) != keys.end()) 
-		&& (keys.find(108) != keys.end()))
+	bool shiftkey = false;
+	
+	//shoft pressed, uppercase
+	if(keys.count(50) != 0)
+		shiftkey = true;
+		
+	if(((shiftkey && keys.size() > 2)
+		|| (!shiftkey && keys.size() > 1))
+		&& keys.count(108) != 0)
 	{
-		//cout << "HURAAAAA!!!" << endl;
-		pipeWrite();
+		for(unsigned short i = 24; i < 59; 
+				i++, (i == 34)? i = 38 : ((i == 47)?i = 52:i=i))
+		{
+			if(keys.count(i) != 0 && letters[i] > 0)
+			{
+				if(shiftkey)
+					cout << i << ":shift+" << letters[i] << endl;
+				else
+					cout << i << ":" << letters[i] << endl;
+				
+				pipeWrite(letters.at(i), shiftkey);
+			}
+		}
 	}
 }
 
@@ -112,12 +135,13 @@ bool KeyboardDweller::setPipeEnds(int rend, int wend)
 /**
  * Writes a signal to window
  */
-bool KeyboardDweller::pipeWrite()
+bool KeyboardDweller::pipeWrite(char letter, bool shiftkey)
 {
-	//fprintf(spw, "hello GTK!\n");
-	//printf("Write KBD!");
-	write(write_pend, "AAAAA", 5);
-	//printf("Written!");
+	if(shiftkey)
+		write(write_pend, strcat(&letter, "+"), 2);
+	else
+		write(write_pend, &letter, 1);
+	
 	return true;
 }
 

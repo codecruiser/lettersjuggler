@@ -24,7 +24,6 @@ class LjThreadCommunication
 		int write_pend;
 		
 		virtual bool setPipeEnds(int, int) = 0;
-		virtual bool pipeWrite() = 0;
 		virtual bool pipeRead() = 0;
 };
 

@@ -61,7 +61,7 @@ void daemonization(bool stdouts)
 void keyboardDeamon(int& pipe_rend, int& pipe_wend)
 {	
 	daemonization(true);
-	
+		
 	KeyboardDweller *kd = new KeyboardDweller;
 	
 	kd->setPipeEnds(pipe_rend, pipe_wend);

@@ -59,24 +59,6 @@ void LjGtkLettersWindow::init()
 	first.detach();	
 	
 	gtk_main();
-	//while(1)
-	//{
-		/*gtk_main_iteration_do(false);
-		
-		if(i > 100000 && i < 500000)
-		{
-			check == false;
-			gtk_widget_hide(window);
-		}
-		else
-		{
-			check == true;
-			gtk_widget_show(window);
-		}*/
-		//pipeWrite();
-		//pipeRead();
-		//printf("+\b");
-	//}
 }
 
 /**
@@ -127,11 +109,9 @@ bool LjGtkLettersWindow::setPipeEnds(int rend, int wend)
 /**
  * Feedback to keyboard
  */
-bool LjGtkLettersWindow::pipeWrite()
+bool LjGtkLettersWindow::pipeWrite(char letter)
 {
-	printf("W!");
-	write(write_pend, "BBBBB", 5);
-	printf("Wrn!\n");
+	write(write_pend, &letter, 1);
 	return true;
 }
 
@@ -142,23 +122,23 @@ bool LjGtkLettersWindow::pipeRead()
 {
 	char str[80];
 	int a;
-	//printf("BBB\n");
-	gtk_widget_show_all(window);
-	gtk_widget_grab_focus(window);
+	
+	//gtk_widget_show_all(window);
+	//gtk_widget_grab_focus(window);
 	
 	do {
 		printf("*");
 		a = read(read_pend, str, 80);
 	} while(a < 1);
 	
-	//printf("%c vs %c\n", lastread, str[0]);
-	//if(lastread != str[0])
-	//{
-		//lastread = str[0];
-		//printf("READ GTK!: %s\n", str);
-	gtk_widget_hide_all(window);
+	printf("%c vs %c\n", lastread, str[0]);
+	if(lastread != str[0])
+	{
+		lastread = str[0];
+		printf("READ GTK!: %s\n", str);
+	//gtk_widget_hide_all(window);
 	
-	//}
+	}
 	
 	pipeRead();
 	
@@ -171,7 +151,7 @@ bool LjGtkLettersWindow::pipeRead()
 void LjGtkLettersWindow::startRead(LjGtkLettersWindow* lgw)
 {
 	lgw->lastread = '0';
-	//printf("AAA %d::\n", lgw->read_pend);
+	printf("AAA %d::\n", lgw->read_pend);
 	lgw->pipeRead();
 }
 

@@ -40,7 +40,7 @@ class LjGtkLettersWindow: public LjThreadCommunication
 		void init();
 		static void destroy(GtkWidget *widget, gpointer data);
 		bool setPipeEnds(int, int);
-		bool pipeWrite();
+		bool pipeWrite(char);
 		bool pipeRead();
 		static void startRead(LjGtkLettersWindow*);
 	

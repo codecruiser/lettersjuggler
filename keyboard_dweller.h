@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <set>
+#include <map>
 #include <iostream>
 
 #include "lj_thread_communication.h"
@@ -35,6 +36,7 @@ class KeyboardDweller: private LjThreadCommunication
 	FILE *spr;
 	Display *display;
 	set<int> keys;
+	map<int, char> letters;
 	
 	bool checkKeyPressed(const char* map, unsigned short key);
 	
@@ -45,7 +47,7 @@ class KeyboardDweller: private LjThreadCommunication
 		void checkActionAssoc();
 		void init();
 		bool setPipeEnds(int, int);
-		bool pipeWrite();
+		bool pipeWrite(char, bool);
 		bool pipeRead();
 };
 
